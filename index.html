@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>GKEDIT AI — JARVIS Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="theme-dark">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-orb" aria-hidden="true">
+          <div class="orb-core"></div>
+        </div>
+        <div class="brand-text">
+          <div class="title">GKEDIT AI</div>
+          <div class="status">
+            <span id="apiStatus" class="dot online"></span>
+            <span id="statusText">ONLINE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="btnSettings" class="btn ghost" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="left-panel">
+        <!-- Orb + waveform -->
+        <div class="orb-pane glass">
+          <canvas id="particleCanvas" class="particles"></canvas>
+          <div id="orb" class="orb idle" aria-hidden="true">
+            <div class="orb-rings"></div>
+            <div class="orb-glow"></div>
+            <div class="orb-core"></div>
+          </div>
+
+          <div class="waveform-wrap">
+            <canvas id="waveform" class="wave"></canvas>
+          </div>
+
+          <div class="orb-legend">
+            <div id="orbState">IDLE</div>
+          </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="actions glass">
+          <div class="actions-row">
+            <button class="quick btn" data-action="time">Time</button>
+            <button class="quick btn" data-action="date">Date</button>
+            <button class="quick btn" data-action="weather">Weather</button>
+          </div>
+          <div class="actions-row">
+            <button class="quick btn" data-action="search">Web Search</button>
+            <button class="quick btn" data-action="youtube">YouTube</button>
+            <button class="quick btn" data-action="calc">Calculator</button>
+          </div>
+          <div class="actions-row">
+            <button id="clearConv" class="btn danger">Clear Conversation</button>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="chat-panel glass">
+        <div id="chat" class="chat">
+          <!-- messages inserted here -->
+        </div>
+
+        <div class="composer">
+          <div class="left-controls">
+            <label for="fileInput" class="btn ghost" title="Upload file">📎</label>
+            <input id="fileInput" type="file" accept="image/*,.txt,.md,.json" hidden />
+            <button id="micBtn" class="btn mic" title="Start voice">🎙️</button>
+            <button id="stopSpeakBtn" class="btn ghost" title="Stop speaking">⏹</button>
+          </div>
+
+          <input id="inputBox" class="input" placeholder="Say 'Hello GKEDIT' or type a message..." />
+
+          <div class="right-controls">
+            <button id="sendBtn" class="btn primary">Send</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Toast / notifications -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Settings -->
+    <div id="settingsPanel" class="settings-panel glass hidden" aria-hidden="true">
+      <h3>Settings</h3>
+      <div class="setting">
+        <label>Voice:</label>
+        <label class="switch"><input id="toggleVoice" type="checkbox" checked /><span></span></label>
+      </div>
+      <div class="setting">
+        <label>Auto-speak AI replies:</label>
+        <label class="switch"><input id="toggleAutoSpeak" type="checkbox" checked /><span></span></label>
+      </div>
+      <div class="setting">
+        <label>Theme:</label>
+        <select id="themeSelect">
+          <option value="dark">Dark (neon)</option>
+          <option value="light">Light</option>
+        </select>
+      </div>
+
+      <div class="setting">
+        <label>API Endpoint (frontend calls this):</label>
+        <input id="apiEndpointInput" type="text" value="/api/chat" />
+        <small class="muted">
+          Do NOT put a private key here. This is the frontend endpoint; the secure key lives on the backend.
+        </small>
+      </div>
+
+      <div class="setting">
+        <label>Weather API base URL (backend or public proxy):</label>
+        <input id="weatherApiInput" type="text" value="" placeholder="e.g. /api/weather or https://your-proxy/weather?q=" />
+        <small class="muted">Leave blank to use built-in demo mode (no external key).</small>
+      </div>
+
+      <div class="setting foot">
+        <button id="saveSettings" class="btn primary">Save</button>
+        <button id="closeSettings" class="btn ghost">Close</button>
+      </div>
+    </div>
+
+    <!-- File / image preview modal -->
+    <div id="previewModal" class="modal hidden">
+      <div class="modal-content">
+        <button id="closePreview" class="btn ghost top-right">✖</button>
+        <div id="previewArea"></div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <small>GKEDIT AI — Mobile-first JARVIS UI • Built with HTML/CSS/JS</small>
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
