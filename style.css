@@ -1,0 +1,520 @@
+/* GKEDIT AI — style.css
+   Mobile-first glassmorphism, neon JARVIS style
+*/
+
+/* Base resets */
+:root{
+  --bg:#0a0f14;
+  --panel: rgba(255,255,255,0.04);
+  --glass: rgba(255,255,255,0.03);
+  --muted: rgba(255,255,255,0.6);
+  --accent: #37f0ff;
+  --accent2:#7a3bff;
+  --danger:#ff4d6d;
+  --success:#21d07a;
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body,#app{height:100%}
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  background:
+    radial-gradient(1000px 500px at 10% 10%, rgba(56, 24, 80, 0.22), transparent 12%),
+    linear-gradient(180deg, rgba(5,7,10,1) 0%, rgba(8, 10, 14, 1) 100%);
+  color: #e9f6ff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:env(safe-area-inset-bottom) 12px 60px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* Topbar */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  backdrop-filter: blur(8px) saturate(140%);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo-orb{width:44px;height:44px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.logo-orb .orb-core{width:12px;height:12px;background:linear-gradient(45deg,var(--accent),var(--accent2));border-radius:50%;box-shadow:0 0 14px var(--accent);animation:logoPulse 3s linear infinite}
+@keyframes logoPulse{0%{transform:scale(0.9)}50%{transform:scale(1.08)}100%{transform:scale(0.9)}}
+.brand-text .title{font-weight:700;letter-spacing:0.6px}
+.brand-text .status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.online{background:var(--success);box-shadow:0 0 8px var(--success)}
+.dot.offline{background:#444;box-shadow:none}
+
+/* Main layout */
+.main{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+.left-panel{display:flex;flex-direction:column;gap:12px}
+.orb-pane{
+  height:260px;
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:12px;
+  min-height:200px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 40px rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px) saturate(120%);
+}
+
+/* Orb central */
+.orb{width:130px;height:130px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;transition:all .25s ease}
+.orb .orb-core{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 30% 20%, #fff, rgba(255,255,255,0.06) 5%, rgba(55,240,255,0.2) 20%, rgba(122,59,255,0.06) 100%);box-shadow: 0 0 40px rgba(55,240,255,0.18), inset 0 -10px 30px rgba(122,59,255,0.06)}
+.orb .orb-glow{position:absolute;inset:-10px;border-radius:50%;filter:blur(18px);opacity:0.9}
+.orb .orb-rings{position:absolute;inset:0;border-radius:50%;box-shadow:0 0 10px rgba(122,59,255,0.12) inset}
+.orb.idle .orb-glow{background:radial-gradient(circle, rgba(55,240,255,0.12), transparent 45%)}
+.orb.listening {transform:scale(1.06);filter:brightness(1.12)}
+.orb.listening .orb-glow{background:radial-gradient(circle, rgba(122,59,255,0.18), rgba(55,240,255,0.14))}
+.orb.thinking{animation:spin 4s linear infinite}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.orb.speaking{animation:talk 1s linear infinite}
+@keyframes talk{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+.orb.error .orb-core{box-shadow:0 0 22px rgba(255,77,109,0.6);background:radial-gradient(circle,#fff,#ff4d6d 30%)}
+
+/* Waveform */
+.waveform-wrap{Width:100%;height:48px;display:flex;align-items:center;justify-content:center}
+.wave{width:100%;height:48px;border-radius:8px;display:block}
+
+/* Particles canvas sits behind orb */
+.particles{position:absolute;inset:0;pointer-events:none;opacity:0.12}
+
+/* Actions */
+.actions{padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:8px}
+.actions-row{display:flex;gap:8px;justify-content:space-between}
+.btn{
+  background:transparent;border:0;padding:8px 12px;border-radius:10px;color:inherit;font-weight:600;cursor:pointer;
+  transition:all .18s ease;display:inline-flex;align-items:center;gap:8px
+}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#021;box-shadow:0 8px 28px rgba(122,59,255,0.12)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+.btn.danger{background:linear-gradient(90deg,var(--danger),#ff7b95);color:#fff}
+.btn.mic{width:46px;height:46px;border-radius:50%;display:inline-grid;place-items:center;font-size:18px;box-shadow: 0 8px 18px rgba(55,240,255,0.04)}
+.btn:active{transform:translateY(1px)}
+
+/* Chat panel */
+.chat-panel{padding:10px;border-radius:14px;display:flex;flex-direction:column;gap:10px;min-height:300px}
+.chat{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:12px}
+.message{max-width:86%;padding:10px;border-radius:12px;line-height:1.3}
+.message.user{align-self:flex-end;background:linear-gradient(90deg,rgba(55,240,255,0.12),rgba(122,59,255,0.06));backdrop-filter:blur(4px)}
+.message.ai{align-self:flex-start;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02)}
+.message .meta{font-size:11px;color:var(--muted);margin-bottom:6px}
+.typing{display:flex;gap:6px;align-items:center}
+.typing .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.14);animation:blink 1.2s infinite}
+.typing .dot:nth-child(2){animation-delay:.12s}
+.typing .dot:nth-child(3){animation-delay:.24s}
+@keyframes blink{0%{opacity:.18}50%{opacity:1}100%{opacity:.18}}
+
+/* Composer */
+.composer{display:flex;gap:8px;padding:8px;border-radius:12px;align-items:center}
+.input{flex:1;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit}
+.left-controls{display:flex;gap:8px;align-items:center}
+
+/* Settings panel */
+.settings-panel{position:fixed;right:14px;top:84px;width:320px;padding:14px;border-radius:12px;z-index:40;box-shadow:0 12px 60px rgba(0,0,0,0.6)}
+.settings-panel h3{margin:0 0 8px 0}
+.setting{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.switch{position:relative;display:inline-block;width:44px;height:24px}
+.switch input{display:none}
+.switch span{position:absolute;inset:0;background:linear-gradient(180deg,#222,#111);border-radius:24px;box-shadow:inset 0 -1px 0 rgba(255,255,255,0.02)}
+.switch span:after{content:'';position:absolute;left:4px;top:4px;width:16px;height:16px;border-radius:50%;background:#fff24px;background:#fff}
+
+/* Modal preview */
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,rgba(2,4,6,0.6),rgba(2,4,6,0.85));z-index:80}
+.modal .modal-content{background:rgba(255,255,255,0.02);padding:12grid-template-columns:360px 1fr;align-items:start}
+  .orb-pane{height:360px}
+  .chat-panel{min-height:420px}
+}
+
+/* Light theme overrides */
+.theme-light{
+  --bg:#eef2fb;
+  color:#223046;
+  --panel: rgba(0,0,0,0.02);
+  --glass: rgba(255,255,255,0.9);
+}
+.theme-light .topbar{background:linear-gradient, JARVIS-style assistant with voice, waveform, AI proxy request, and built-in tools.
+   IMPORTANT: Do NOT place any private API keys here. Use a secure backend.
+*/
+
+/* ========== CONFIGURATION ===========
+   These are frontend configuration values. Do NOT store secret API keys here.
+   The frontend will call backend.
+*/
+let API_ENDPOINT = '/api/chat';         // FRONTEND endpoint to call for AI — change in Settings (no secret keys here)
+let WEATHER_API_BASE = '';             // Optional base URL for weather proxy e.g. '/api/weather?q=' or 'https://myproxy/weather?q='
+/* ===================================== */
+
+const state = {
+  listening: false,
+  speaking: false,
+  thinking: false,
+  orbState: 'IDLE',
+  voiceEnabled: true,
+  autoSpeak: true,
+  history: [],
+  recognition: null,
+  synth: window.speechSynthesis,
+  currentUtterance: null
+};
+
+/* ---------- DOM ---------- */
+const orb = document.getElementById('orb');
+const orbStateLabel = document.getElementById('orbState');
+const micBtn = document.getElementById('micBtn');
+const stopSpeakBtn = document.getElementById('stopSpeakBtn');
+const inputBox = document.getElementById('inputBox');
+const sendBtn = document.getElementById('sendBtn');
+const chatEl = document.getElementById('chat');
+const apiStatus = document.getElementById('apiStatus');
+const statusText = document.getElementById('statusText');
+const btnSettings = document.getElementById('btnSettings');
+const settingsPanel = document.getElementById('settingsPanel');
+const toggleVoice = document.getElementById('toggleVoice');
+const toggleAutoSpeak = document.getElementById('toggleAutoSpeak');
+const themeSelect = document.getElementById('themeSelect');
+const apiEndpointInput = document.getElementById('apiEndpointInput');
+const weatherApiInput = document.getElementById('weatherApiInput');
+const saveSettings = document.getElementById('saveSettings');
+const closeSettings = document.getElementById('closeSettings');
+const clearConv = document.getElementById('clearConv');
+const fileInput = document.getElementById('fileInput');
+const previewModal = document.getElementById('previewModal');
+const previewArea = document.getElementById('previewArea');
+const closePreview = document.getElementById('closePreview');
+const toast = document.getElementById('toast');
+const particleCanvas = document.getElementById('particleCanvas');
+const waveformCanvas = document.getElementById('waveform');
+
+/* ---------- Utilities ---------- */
+function toastMsg(text, timeout=2500){
+  toast.textContent = text;
+  toast.classList.remove('hidden');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>toast.classList.add('hidden'), timeout);
+}
+
+function setOrbState(s){
+  state.orbState = s;
+  orb.classList.remove('idle','listening','thinking','speaking','error');
+  orb.classList.add(s.toLowerCase());
+  orbStateLabel.textContent = s.toUpperCase();
+}
+
+/* ---------- Local Storage: conversation ---------- */
+const STORAGE_KEY = 'gkedit_conv_v1';
+function saveHistory(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history || []));
+}
+function loadHistory(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    state.history = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    state.history = [];
+  }
+}
+function clearHistory(){
+  state.history = [];
+  saveHistory();
+  renderMessages();
+}
+
+/* ---------- Rendering ---------- */
+function renderMessages(){
+  chatEl.innerHTML = '';
+  state.history.forEach(msg=>{
+    const el = document.createElement('div');
+    el.className = 'message ' + (msg.role === 'user' ? 'user' : 'ai');
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = `${msg.role === 'user' ? 'You' : 'GKEDIT'} • ${new Date(msg.ts).toLocaleTimeString()}`;
+    el.appendChild(meta);
+
+    if(msg.type === 'image'){
+      const img = document.createElement('img');
+      img.src = msg.content;
+      img.style.maxWidth='220px';
+      img.style.borderRadius='8px';
+      el.appendChild(img);
+    } else {
+      const p = document.createElement('div');
+      p.className = 'content';
+      p.textContent = msg.content;
+      el.appendChild(p);
+    }
+
+    chatEl.appendChild(el);
+  });
+
+  // scroll to bottom
+  setTimeout(()=> chatEl.scrollTop = chatEl.scrollHeight, 80);
+}
+
+/* ---------- Add message ---------- */
+function addMessage(role, content, extras = {}){
+  const msg = {
+    role,
+    content,
+    ts: Date.now(),
+    ...extras
+  };
+  state.history.push(msg);
+  saveHistory();
+  renderMessages();
+  return msg;
+}
+
+/* ---------- Voice: Speech Recognition ---------- */
+function initRecognition(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SpeechRecognition) return null;
+  const rec = new SpeechRecognition();
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+  rec.onstart = () => {
+    state.listening = true;
+    setOrbState('LISTENING');
+    toastMsg('Listening...');
+    startMicAnalyser();
+  };
+  rec.onresult = ev => {
+    const text = ev.results[0][0].transcript.trim();
+    addMessage('user', text);
+    stopMicAnalyser();
+    setTimeout(()=>processUserInput(text), 60);
+  };
+  rec.onerror = ev => {
+    console.error('Recognition error', ev);
+    stopMicAnalyser();
+    setOrbState('ERROR');
+    toastMsg('Speech recognition error');
+    setTimeout(()=>setOrbState('IDLE'), 1200);
+  };
+  rec.onend = () => {
+    state.listening = false;
+    stopMicAnalyser();
+    if(state.orbState !== 'SPEAKING' && state.orbState !== 'THINKING') setOrbState('IDLE');
+  };
+  return rec;
+}
+
+/* ---------- Microphone analyzer (visual waveform) ---------- */
+let audioContext = null, analyser = null, analyserSource = null, micStream = null, wfRAF = null;
+const wfCanvas = waveformCanvas;
+const wfCtx = wfCanvas.getContext('2d');
+
+function startMicAnalyser(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream=>{
+    micStream = stream;
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.85;
+    analyserSource = audioContext.createMediaStreamSource(stream);
+    analyserSource.connect(analyser);
+    drawWaveform();
+  }).catch(err=>{
+    console.warn('Mic access denied or unavailable', err);
+  });
+}
+
+function stopMicAnalyser(){
+  if(micStream){
+    micStream.getTracks().forEach(t=>t.stop());
+    micStream = null;
+  }
+  if(audioContext){
+    try{ audioContext.close(); }catch(e){}
+    audioContext = null;
+  }
+  if(wfRAF) cancelAnimationFrame(wfRAF);
+  clearWaveform();
+}
+
+function drawWaveform(){
+  const WIDTH = wfCanvas.width = wfCanvas.clientWidth * devicePixelRatio;
+  const HEIGHT = wfCanvas.height = wfCanvas.clientHeight * devicePixelRatio;
+  wfCtx.clearRect(0,0,WIDTH,HEIGHT);
+  if(!analyser){
+    // fallback CSS animation
+    wfCtx.fillStyle = 'rgba(255,255,255,0.02)';
+    wfCtx.fillRect(0,0,WIDTH,HEIGHT);
+    return;
+  }
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  function draw(){
+    wfRAF = requestAnimationFrame(draw);
+    analyser.getByteTimeDomainData(dataArray);
+    wfCtx.fillStyle = 'rgba(2,4,6,0.12)';
+    wfCtx.fillRect(0,0,WIDTH,HEIGHT);
+    wfCtx.lineWidth = 2 * devicePixelRatio;
+    const gradient = wfCtx.createLinearGradient(0,0,WIDTH,0);
+    gradient.addColorStop(0, 'rgba(55,240,255,0.9)');
+    gradient.addColorStop(1, 'rgba(122,59,255,0.9)');
+    wfCtx.strokeStyle = gradient;
+    wfCtx.beginPath();
+    const sliceWidth = WIDTH / bufferLength;
+    let x = 0;
+    for(let i=0;i<bufferLength;i++){
+      const v = dataArray[i]/128.0;
+      const y = v * HEIGHT/2;
+      if(i===0) wfCtx.moveTo(x,y);
+      else wfCtx.lineTo(x,y);
+      x += sliceWidth;
+    }
+    wfCtx.lineTo(WIDTH,HEIGHT/2);
+    wfCtx.stroke();
+  }
+  draw();
+}
+
+function clearWaveform(){
+  if(!wfCtx) return;
+  wfCtx.clearRect(0,0,wfCanvas.width, wfCanvas.height);
+}
+
+/* ---------- Speech Synthesis ---------- */
+function speakText(text, onend){
+  if(!state.voiceEnabled) return onend && onend();
+  if(!('speechSynthesis' in window)) return onend && onend();
+
+  if(state.currentUtterance){
+    window.speechSynthesis.cancel();
+    state.currentUtterance = null;
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  // pick a voice close to preference
+  const.find/female|google/i.test(v.name)) || voices[0];
+    if(pref) u.voice = pref;
+  }
+  u.onstart = () => { state.speaking = true; setOrbState('SPEAKING'); startSpeakingWave(); };
+  u.onend = () => { state.speaking = false; setOrbState('IDLE'); stopSpeakingWave(); state.currentUtterance = null; onend && onend(); };
+  u.onerror = (e) => { console.error('TTS error', e); state.speaking=false; setOrbState('ERROR'); stopSpeakingWave(); onend && onend(); };
+  state.currentUtterance = u;
+  window.speechSynthesis.speak(u);
+}
+
+/* Speaking waveform (fake animation) */
+let speakRAF = null;
+function startSpeakingWave(){
+  const WIDTH = wfCanvas.width = wfCanvas.clientWidth * devicePixelRatio;
+  const HEIGHT = wfCanvas.height = wfCanvas.clientHeight * devicePixelRatio;
+  let t=0;
+  function draw(){
+    speakRAF = requestAnimationFrame(draw);
+    t += 0.08;
+    wfCtx.clearRect(0,0,WIDTH,HEIGHT);
+    for(let i=0;i<4;i++){
+      const hue = (200 + i*30) % 360;
+      wfCtx.fillStyle = `hsla(${hue},80%,60%,${0.06 + i*0.04})`;
+      const amplitude = (Math.sin(t + i) + 1) * (HEIGHT/10 + i*4);
+      wfCtx.fillRect(i*20 * devicePixelRatio, HEIGHT/2 - amplitude/2, WIDTH - i*40 * devicePixelRatio, amplitude);
+    }
+  }
+  draw();
+}
+function stopSpeakingWave(){ if(speakRAF) cancelAnimationFrame(speakRAF); clearWaveform(); }
+
+/* ---------- AI API integration ---------- */
+async function sendToAI(messages){
+  // messages: array of {role, content}
+  setOrbState('THINKING');
+  apiStatus.classList.remove('online');
+  apiStatus.classList.add('offline');
+  statusText.textContent = 'CONNECTING...';
+  try{
+    const res = await fetch(API_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({messages})
+    });
+    if(!res.ok){
+      const txt = await res.text();
+      throw new Error('API error: ' + (txt || res.status));
+    }
+    const json = await res.json();
+    // Expect structured response: { reply: "text" } — adjust backend accordingly
+    apiStatus.classList.remove('offline');
+    apiStatus.classList.add('online');
+    statusText.textContent = 'ONLINE';
+    setOrbState('IDLE');
+
+    return json;
+  }catch(err){
+    console.error('AI request failed', err);
+    apiStatus.classList.remove('online');
+    apiStatus.classList.add('offline');
+    statusText.textContent = 'OFFLINE';
+    setOrbState('ERROR');
+    return { error: String(err) };
+  }
+}
+
+/* ---------- Process user input ---------- */
+async function processUserInput(text){
+  // Basic voice-command processing
+  setOrbState('THINKING');
+  addMessage('user', text);
+  const cmd = text.toLowerCase();
+
+  // Voice command handling examples:
+  if(/^(hello|hi|hey)\s+gkedit/i.test(text)){
+    const reply = `Hello — I am GKEDIT. How can I assist you today?`;
+    handleAIReply(reply);
+    return;
+  }
+  if(/weather|temperature|forecast/i.test(cmd)){
+    // extract location if present
+    const locMatch = text.match(/in ([a-zA-Z\s]+)/i);
+    const city = locMatch ? locMatch[1].trim() : 'current location';
+    getWeather(city);
+    return;
+  }
+  if(/calculate|what is|what's|compute|evaluate/i.test(cmd) && /[0-9+\-/*%^().]/.test(text)){
+    let expr = text.replace(/(calculate|compute|what is|what's|evaluate)/ig,'').replace(/x/ig,'*').replace(/times/ig,'*');
+    expr(result === null ? "I couldn't compute that." : `Result: ${result}`);
+    return;
+  }
+  if(/search youtube|youtube search|youtube for/i.test(cmd)){
+    const q = text.replace(/(search|find|youtube|on youtube|youtube search)/ig,'').trim();
+    const query = encodeURIComponent(q || 'trending');
+    window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
+    handleAIReply(`Opened YouTube results for "${q || 'trending'}".`);
+    return;
+  }
+  if(/open google|go to google|open google.com/i.test(cmd)){
+    window.open('https://www.google.com', '_blank');
+    handleAIReply('Opening Google.');
+    return;
+  }
+  if(/time|what time/i.test(cmd) && /what|tell|show|give/i.test(cmd)){
+    handleAIReply(`The time is ${new Date().toLocaleTimeString()}`);
+    return;
+  }
+  if(/set a rem
